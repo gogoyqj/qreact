@@ -110,7 +110,7 @@ Any libs of `[react,react-dom]/lib/xx` being used, if these is a `qreact/lib/xx`
     }
 ```
 
-## Thanks To
+## Acknowledgements 
 
 Qreact bases on [developit preact@7.1.0](https://github.com/developit/preact/tree/7.1.0/), [developit preact-compat@3.14.1](https://github.com/developit/preact-compat/tree/3.14.1) and [Facebook React@v15.3.1](https://github.com/facebook/react/tree/v15.3.1).
 
