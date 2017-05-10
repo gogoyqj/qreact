@@ -11,8 +11,20 @@ We have made some Modifications to fulfil the rewrite version Qreact.
 
 ### Run Test
 
+#### Run UI Tests
+
 ```
+    # test all in test/*
+    # start selenium-server-standalone
+    java -jar selenium-server-standalone-3.3.1.jar
     npm run test
+```
+
+#### Run Generic Tests
+
+```
+    # auto ignore test/ui/test-qrn-web.js
+    ./node_modules/.bin/karma start
 ```
 
 ### Passed Tests
@@ -34,5 +46,9 @@ We have made some Modifications to fulfil the rewrite version Qreact.
 ### Skipped Tests
 
 null
+
+### UI Tests Using Selenium
+
++ test/ui/test-qrn-web.js - test with react native web demo
 
 
