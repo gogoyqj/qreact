@@ -5,9 +5,10 @@
   "main": "cjs/qreact.js",
   "jsnext:main": "es/qreact.js",
   "scripts": {
-    "test": "node run-test.js",
+    "test": "npm-run-all build _test",
+    "_test": "node run-test.js singleRun",
     "build": "sh build.sh",
-    "prepublish": "npm-run-all build test"
+    "prepublish": "npm-run-all test"
   },
   "keywords": [
     "react",
@@ -36,6 +37,7 @@
     "babel-runtime": "^5.8.38",
     "chai": "^3.5.0",
     "core-js": "^2.4.1",
+    "detect-port": "^1.1.2",
     "karma": "^1.4.1",
     "karma-chai-sinon": "^0.1.5",
     "karma-chrome-launcher": "^2.0.0",

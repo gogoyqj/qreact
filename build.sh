@@ -4,35 +4,62 @@ echo 'start build'
 
 # build qreact-react-web.js
 echo 'build umd'
-cp -f rollup.config.js _reactweb.config.js
-cp -f rollup.config.js _rollup.config.js
+configs="_rollup.config.js _reactweb.config.js"
+
+for config in $configs;do
+    cp -f rollup.config.js $config;
+done
+
+sed -i "" "s/\/\/ comment-start/\/\* comment-start/g" src/preact-compat.js
+sed -i "" "s/\/\/ comment-end/comment-end *\//g" src/preact-compat.js
+sed -i "" "s/\/\/ comment-start/\/\* comment-start/g" src/preact-compat-react-web.js
+sed -i "" "s/\/\/ comment-end/comment-end *\//g" src/preact-compat-react-web.js
+
+# special replace for react native web
 cp -f src/preact-compat.js src/preact-compat-react-web.js
 sed -i "" "s/dist\/qreact\.js/dist\/qreact-react-web.js/g" _reactweb.config.js
 sed -i "" "s/src\/preact-compat\.js/src\/preact-compat-react-web.js/g" _reactweb.config.js
 sed -i "" "s/\/\/ import '.\/event\/injectResponderEventPlugin'/import '.\/event\/injectResponderEventPlugin'/" src/preact-compat-react-web.js
 rollup -c _reactweb.config.js
-# exit
 uglifyjs dist/qreact-react-web.js -o dist/qreact-react-web.min.js -p relative -m --source-map dist/qreact-react-web.min.map
+
 # build qreact.js with rollup
 rollup -c rollup.config.js
 
-echo 'build cjs'
-configs="_rollup.config.js _reactweb.config.js"
-for config in $configs;do
-    sed -i "" "s/dist\//cjs\//g" $config
-    sed -i "" "s/umd/cjs/g" $config
-    rollup -c $config
-done
+
+sed -i "" "s/\/\* comment-start/\/\/ comment-start/g" src/preact-compat.js
+sed -i "" "s/comment-end \*\//\/\/ comment-end/g" src/preact-compat.js
+sed -i "" "s/\/\* comment-start/\/\/ comment-start/g" src/preact-compat-react-web.js
+sed -i "" "s/comment-end \*\//\/\/ comment-end/g" src/preact-compat-react-web.js
 
 echo 'build es'
 for config in $configs;do
-    sed -i "" "s/cjs\//es\//g" $config
-    sed -i "" "s/cjs/es/g" $config
+    sed -i "" "s/dist\//es\//g" $config
+    sed -i "" "s/'default'/'named'/g" $config
+    sed -i "" "s/\'umd\'/\'es\'/g" $config
     rollup -c $config
-    rm -f $config
 done
 
+
+sed -i "" "s/\/\/ comment-start/\/\* comment-start/g" src/preact-compat.js
+sed -i "" "s/\/\/ comment-end/comment-end *\//g" src/preact-compat.js
+sed -i "" "s/\/\/ comment-start/\/\* comment-start/g" src/preact-compat-react-web.js
+sed -i "" "s/\/\/ comment-end/comment-end *\//g" src/preact-compat-react-web.js
+
+echo 'build cjs'
+for config in $configs;do
+    sed -i "" "s/es\//cjs\//g" $config
+    sed -i "" "s/\'es\'/\'cjs\'/g" $config
+    sed -i "" "s/'named'/'default'/g" $config
+    rollup -c $config
+done
+
+for config in $configs;do
+    rm -f $config
+done
 # rm -f src/preact-compat-react-web.js
+sed -i "" "s/\/\* comment-start/\/\/ comment-start/g" src/preact-compat.js
+sed -i "" "s/comment-end \*\//\/\/ comment-end/g" src/preact-compat.js
 
 # since rollup didn't remove comments, remove "[//|/*|*] @provides" with sed
 sed -i "" "s/@provides//g" dist/qreact.js
