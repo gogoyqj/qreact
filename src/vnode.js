@@ -9,7 +9,7 @@ export function VNode(nodeName, attributes, children) {
     /** @type {array<VNode>|undefined} */
     while (Array.isArray(children) && children.length == 1) {
         children = children[0];
-    };
+    }
     if (children != null) this.children = children;
 
     /** Reference to the given key. */

@@ -139,7 +139,8 @@ class ContextProvider {
         return this.props.context;
     }
     render(props) {
-        return props.children[0];
+        let children = props.children;
+        return children instanceof Array ? children[0] : children;
     }
 }
 
@@ -239,7 +240,7 @@ function statelessComponentHook(Ctor) {
     Wrapped = wrapStatelessComponent(Ctor);
 
     Object.defineProperty(Wrapped, COMPONENT_WRAPPER_KEY, { configurable: true, value: true });
-    Wrapped.displayName = Ctor.displayName;
+    Wrapped.displayName = Ctor.displayName || Ctor.name;
     Wrapped.propTypes = Ctor.propTypes;
     Wrapped.defaultProps = Ctor.defaultProps;
 
@@ -576,6 +577,7 @@ PureComponent.prototype.shouldComponentUpdate = function(props, state) {
 let qreact = {
     version,
     options, // support devtools
+    h,
     DOM,
     PropTypes, // actually proptypes target in src/proptypes.js
     Children,
@@ -603,3 +605,25 @@ ReactAdapter.adapt(qreact);
 ReactDefaultInjection.inject();
 
 export default qreact;
+
+// comment-start
+export {
+    version,
+    options,
+    h,
+    DOM,
+    PropTypes, // actually proptypes target in src/proptypes/index.js
+    Children,
+    render,
+    createClass,
+    createFactory,
+    createElement,
+    cloneElement,
+    isValidElement,
+    findDOMNode,
+    unmountComponentAtNode,
+    Component,
+    PureComponent,
+    renderSubtreeIntoContainer as unstable_renderSubtreeIntoContainer
+};
+// comment-end

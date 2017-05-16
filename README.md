@@ -118,13 +118,82 @@ here is UMD `node_modules/qreact/dist/devtools.js`, copy or pack it.
     <script src="${path}/devtools.js"></script>  
 ```
 
+### Server Side render
+
+```shell
+    npm install qreact-render-to-string
+```
+
+#### Client Side Code
+
+```jsx
+    import React from 'react';
+    import ReactDOM from 'react-dom';
+    import App from './App';
+
+    const data = window.__backend_data__;
+
+    ReactDOM.render(
+        <App initData={data}/>,
+        document.body,
+        document.getElementById('app')
+    );
+```
+
+#### Server Side Code
+
+Compatible with Original React `import { renderToString } from 'react-dom/server'`, if alias `react-dom/server` to `qreact-render-to-string`.
+
+```jsx
+    import React from 'react';
+    import { renderToString } from 'qreact-render-to-string';
+    import App from './App';
+    const html = renderToString(<App initData={data}/>);
+```
+
+#### Business Code
+
+```jsx
+    import React, {Component} from 'react';
+    export default class App extends Component {
+        render() {
+            return xxxx
+        }
+    }
+```
+
+#### Maybe .babelrc
+
+This config could be shared between Client and Server side.
+
+```json
+{
+    "sourceMaps": true,
+    "presets": [
+        "es2015",
+    ],
+    "plugins": [
+        ["transform-react-jsx"],
+        ["module-resolver", {
+            "root": ["./"],
+            "alias": {
+                "react": "qreact",
+                "react-dom": "qreact"
+            }
+        }]
+    ]
+}
+```
+
+Here is [qreact-render-to-string example](./examples/preact-redux-ssr-example/).
+
 ## Thanks To
 
 Qreact bases on [developit preact@7.1.0](https://github.com/developit/preact/tree/7.1.0/), [developit preact-compat@3.14.1](https://github.com/developit/preact-compat/tree/3.14.1) and [Facebook React@v15.3.1](https://github.com/facebook/react/tree/v15.3.1).
 
 The core parts, include virtual dom and mechanism of diff base on Preact. We modify the data structure of vnodes and diff algorithm refer to React to bring better diffing and narrow gap with original React.
 
-The event system of Orignal React is used to replace Preact event binder, also PanResponder is included to support React Native Web.
+The event system of Original React is used to replace Preact event binder, also PanResponder is included to support React Native Web.
 
 
 ## License

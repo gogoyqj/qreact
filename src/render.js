@@ -20,6 +20,8 @@ export function render(vnode, parent, merge) {
     if (parent) {
         component = parent._component;
         if (!merge) merge = parent.children[0];
+        // ignore SCRIPT
+        if (merge && merge.nodeName === "SCRIPT") merge = null;
 
         // first render clear container
         // or nodeName change, unmout the old, mount the new, or update

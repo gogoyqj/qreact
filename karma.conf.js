@@ -1,5 +1,5 @@
 /*eslint no-var:0, object-shorthand:0 */
-var runUITests = require.main.filename.indexOf('run-test.js') !== -1;
+var runUITests = require.main.filename.indexOf('run-test.js') !== -1 && process.env.seleniumEnable !== 'false';
 var coverage = String(process.env.COVERAGE) !== 'false' && false,
     ci = String(process.env.CI).match(/^(1|true)$/gi),
     pullRequest = !String(process.env.TRAVIS_PULL_REQUEST).match(/^(0|false|undefined)$/gi),
@@ -56,7 +56,7 @@ module.exports = function(config) {
                 pattern: 'test/polyfills.js',
                 watched: false,
                 webdriver: true
-            }, 
+            },
             {
                 pattern: 'test/{browser,shared}/**.js',
                 webdriver: true,
@@ -77,6 +77,8 @@ module.exports = function(config) {
             type: 'html',
             dir: 'coverage/'
         },
+
+        singleRun: process.env.singleRun === 'true',
 
         webpack: {
             devtool: 'inline-source-map',
