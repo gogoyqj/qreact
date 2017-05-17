@@ -30,7 +30,6 @@ export default {
             ]
         }),
         replace({
-            global: 'window',
             'process.env.NODE_ENV': JSON.stringify('production')
         })
     ]

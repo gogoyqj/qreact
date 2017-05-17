@@ -88,11 +88,11 @@ var topLevelTypes = keyMirror({
     topWaiting: null,
     topWheel: null
 });
-
+if (typeof window === 'undefined') global.window = {};
 var EventConstants = {
     topLevelTypes: topLevelTypes,
     PropagationPhases: PropagationPhases,
-    touchSupport: ('ontouchstart' in global) && (navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0),
+    touchSupport: ('ontouchstart' in window) && (navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0),
 };
 
 export default EventConstants;
