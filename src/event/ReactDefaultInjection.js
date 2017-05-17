@@ -22,8 +22,7 @@ import ReactEventListener from './ReactEventListener';
 // here can only pack with rollup !!
 // var ReactInjection = {};
 import ReactDOMComponentTree from './ReactDOMComponentTree';
-
-global.internalInstanceKey = ReactDOMComponentTree.internalInstanceKey
+(typeof window !== 'undefined' ? window : global).internalInstanceKey = ReactDOMComponentTree.internalInstanceKey;
 import ReactBrowserEventEmitter from './ReactBrowserEventEmitter';
 // ReactInjection.EventEmitter = ReactBrowserEventEmitter.injection
 import EventPluginHub from './EventPluginHub';
