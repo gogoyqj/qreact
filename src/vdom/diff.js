@@ -389,7 +389,7 @@ function _flatChildren(children, prefix, childrenFlated, existKeys, index) {
         case 'object'   :
             // null or empty array
             if (children === null || children.length === 0) return childrenFlated;
-            singleNode = !!children.nodeName;
+            singleNode = !Array.isArray(children);
             break;
         case 'string':
         case 'number':
