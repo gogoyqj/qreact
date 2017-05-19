@@ -186,10 +186,12 @@ function idiff(dom, vnode, context, mountAll, inst) {
             _component = _component._renderedChildren;
         }
     }
-    innerDiffNode(out, childrenFlated, context, mountAll, !!props.dangerouslySetInnerHTML, out === dom && (_component || prevChildren));
+    let attributes = vnode.attributes;
+    // if set html, jump diff
+    if (!(attributes && attributes.dangerouslySetInnerHTML != null)) innerDiffNode(out, childrenFlated, context, mountAll, false, out === dom && (_component || prevChildren));
 
     // Apply attributes/props from VNode to the DOM Element:
-    diffAttributes(out, vnode.attributes, props, vnode);
+    diffAttributes(out, attributes, props, vnode);
 
 
     isSvgMode = prevSvgMode;
@@ -207,9 +209,6 @@ function idiff(dom, vnode, context, mountAll, inst) {
  *    @param {Boolean} absorb        If `true`, consumes externally created elements similar to hydration
  */
 function innerDiffNode(dom, childrenFlated, context, mountAll, absorb, childrenPrevflated) {
-    if (absorb) {
-        removeChildren(dom, !'unmountOnly');
-    }
     let originalChildren = dom.childNodes,
         originalChildrenArr = [].slice.call(originalChildren, 0), // array never changes
         vchildren = childrenFlated && childrenFlated.children,

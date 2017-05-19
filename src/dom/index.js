@@ -3,6 +3,7 @@ import options from '../options';
 
 // m-start
 import { recycle } from '../util';
+import { removeChildren } from '../vdom/diff';
 
 // use comment node replace null
 const placeHolder = 'qreact empty';
@@ -81,7 +82,10 @@ export function setAccessor(node, name, old, value, isSvg, inst) {
         }
     }
     else if (name==='dangerouslySetInnerHTML') {
-        if (value) node.innerHTML = value.__html || '';
+        if (value) {
+            removeChildren(node, !'unmountOnly');
+            node.innerHTML = value.__html || '';
+        }
     }
     else if (name[0]=='o' && name[1]=='n') {
         // m-start
