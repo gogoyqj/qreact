@@ -11,12 +11,16 @@ import options from './options';
  *  render(<span>foo</span>, document.body);
  */
 export function h(nodeName, attributes) {
-    let i, children, args = arguments;
-    for (i=args.length; i-- > 2; ) {
-        (children || (children = [])).unshift(args[i]);
+    let children = null, args = arguments, i = args.length;
+    if (i === 3) {
+        children = args[2];
+    } else {
+        for (i=args.length; i-- > 2; ) {
+            (children = children || []).unshift(args[i]);
+        }
     }
-    if (attributes && attributes.children) {
-        if (!children || !children.length) (children || (children = [])).push(attributes.children);
+    if (attributes) {
+        if (children == null) children = attributes.children;
         delete attributes.children;
     }
     let p = new VNode(nodeName, attributes || undefined, children);

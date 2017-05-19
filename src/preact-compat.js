@@ -287,9 +287,6 @@ function cloneElement(element, props = {}) {
         c = [].slice.call(arguments, 2);
     } else {
         c = element.children || props.children;
-        if (!Array.isArray(c)) {
-            c = [c];
-        }
     }
 
     let node = h(
@@ -495,10 +492,10 @@ function propsHook(props) {
     if (!props) return;
 
     // React annoyingly special-cases single children, and some react components are ridiculously strict about this.
-    let c = props.children;
-    if (c && Array.isArray(c) && c.length === 1) {
-        props.children = c[0]; // object or arr.length > 1
-    }
+    // let c = props.children;
+    // if (c && Array.isArray(c) && c.length === 1) {
+    //     props.children = c[0]; // object or arr.length > 1
+    // }
 
     // add proptype checking
     // if (DEV) {
