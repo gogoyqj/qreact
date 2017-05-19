@@ -140,9 +140,9 @@ describe('h(jsx)', () => {
                     [m('a'), [m('b'), m('c')], m('d')]
                 ]
             })
-        ).to.have.property('children').that.eql([
+        ).to.have.property('children').that.eql([[
             'a', ['b', 'c'], 'd'
-        ].map(m));
+        ].map(m)]);
 
         expect(
             h('foo', { children: m('a') })
