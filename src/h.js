@@ -15,7 +15,7 @@ export function h(nodeName, attributes) {
     if (i === 3) {
         children = args[2];
     } else {
-        for (i=args.length; i-- > 2; ) {
+        for (; i-- > 2;) {
             (children = children || []).unshift(args[i]);
         }
     }

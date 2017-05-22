@@ -186,10 +186,12 @@ function idiff(dom, vnode, context, mountAll, inst) {
             _component = _component._renderedChildren;
         }
     }
-    innerDiffNode(out, childrenFlated, context, mountAll, !!props.dangerouslySetInnerHTML, out === dom && (_component || prevChildren));
+    let attributes = vnode.attributes;
+    // if set html, jump diff
+    if (!(attributes && attributes.dangerouslySetInnerHTML != null)) innerDiffNode(out, childrenFlated, context, mountAll, false, out === dom && (_component || prevChildren));
 
     // Apply attributes/props from VNode to the DOM Element:
-    diffAttributes(out, vnode.attributes, props, vnode);
+    diffAttributes(out, attributes, props, vnode);
 
 
     isSvgMode = prevSvgMode;
@@ -207,9 +209,6 @@ function idiff(dom, vnode, context, mountAll, inst) {
  *    @param {Boolean} absorb        If `true`, consumes externally created elements similar to hydration
  */
 function innerDiffNode(dom, childrenFlated, context, mountAll, absorb, childrenPrevflated) {
-    if (absorb) {
-        removeChildren(dom, !'unmountOnly');
-    }
     let originalChildren = dom.childNodes,
         originalChildrenArr = [].slice.call(originalChildren, 0), // array never changes
         vchildren = childrenFlated && childrenFlated.children,
@@ -389,7 +388,7 @@ function _flatChildren(children, prefix, childrenFlated, existKeys, index) {
         case 'object'   :
             // null or empty array
             if (children === null || children.length === 0) return childrenFlated;
-            singleNode = !!children.nodeName;
+            singleNode = !Array.isArray(children);
             break;
         case 'string':
         case 'number':
@@ -400,13 +399,11 @@ function _flatChildren(children, prefix, childrenFlated, existKeys, index) {
     if (singleNode) {
         let key = children.attributes && children.attributes.key;
         if (key != null) {
-            if (DEV) {
-                if (existKeys && (key in existKeys)) {
-                    console.error('duplicate key', key, children && children.attributes || children);
-                } else {
-                    existKeys[key] = '';
-                }
+            // auto fix duplicate key prom
+            if (existKeys && (key in existKeys)) {
+                key = key + '@' + index;
             }
+            existKeys[key] = '';
             key = prefix + '$' + key;
         } else {
             key = prefix + (index || 0);
@@ -416,8 +413,9 @@ function _flatChildren(children, prefix, childrenFlated, existKeys, index) {
         mountIndexes[key] = childrenFlated.__counter__++;
     } else {
         let _prefix = prefix + (index != null ? index + ':' : '');
+        existKeys = {};
         children.forEach((child, index) => {
-            _flatChildren(child, _prefix, childrenFlated, {}, index);
+            _flatChildren(child, _prefix, childrenFlated, existKeys, index);
         }, this);
     }
     return childrenFlated;
