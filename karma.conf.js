@@ -17,15 +17,32 @@ module.exports = function(config) {
         },
         basePath: __dirname,
 
+        hostname: '127.0.0.1',
         customLaunchers: runUITests ? {
-            'Chrome': {
+            'Chrome-PC': {
                 base: 'WebDriverio',
                 browserName: 'chrome',
                 name: 'Karma'
+            },
+            'Chrome-Android': {
+                base: 'WebDriverio',
+                browserName: 'chrome',
+                name: 'Karma',
+                config: {
+                    desiredCapabilities: {
+                        chromeOptions: {
+                            androidPackage: 'com.android.chrome'
+                        },
+                        deviceName: '4_0',
+                        browserName: 'chrome',
+                        platformName: 'Android'
+                    },
+                    logLevel: 'none'//'verbose'
+                }
             }
         } : {},
         // customLaunchers: sauceLabs ? sauceLabsLaunchers : travisLaunchers,
-        browsers: ['Chrome'],
+        browsers: ['Chrome-PC'],
         frameworks: ['source-map-support', 'mocha', 'chai-sinon'],
 
         reporters: ['mocha', 'coverage'],
