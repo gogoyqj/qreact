@@ -2,10 +2,14 @@
 
 ## Description
 
-Alternative to React, same api and behavior, eg: lifecycle, vnodes data structure, smaller size.
+Alternative to React, same api and behavior, eg: lifecycle, vnodes data structure, without modifying ur business code, but smaller size.
 
-    minified: 60KB 
-    gzipped : 20KB 
+### Size and Performance Comparison
+
+| Framework              | Minified Size | Gzipped Size | Performance |
+|------------------------|---------------|--------------|-------------|
+| React/15.3.1           | 148kb         | 43kb         | 24/sec      |
+| Qreact                 | 60kb          | 20kb         | 30/sec      |
 
 ## Usage
 
