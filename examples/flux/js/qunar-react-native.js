@@ -23901,7 +23901,7 @@
                 });
 
 
-                let func = function() {
+                var func = function() {
                     if (opts.title) {
                         nextView.routerOpts.title = opts.title;
                     }
