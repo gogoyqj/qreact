@@ -3,8 +3,9 @@
 echo 'start build'
 kernal=$(uname -s)
 alias ised="sed -i \"\""
-if [[ $kernal == "Linux" ]];then
-    alias ised="sed -i"
+if [ $kernal = "Linux" ];
+then
+    alias ised="sed -i\"\""
 fi
 
 # build qreact-react-web.js
@@ -15,13 +16,14 @@ for config in $configs;do
     cp -f rollup.config.js $config;
 done
 
+cp -f src/preact-compat.js src/preact-compat-react-web.js
+
 ised "s/\/\/ comment-start/\/\* comment-start/g" src/preact-compat.js
 ised "s/\/\/ comment-end/comment-end *\//g" src/preact-compat.js
 ised "s/\/\/ comment-start/\/\* comment-start/g" src/preact-compat-react-web.js
 ised "s/\/\/ comment-end/comment-end *\//g" src/preact-compat-react-web.js
 
 # special replace for react native web
-cp -f src/preact-compat.js src/preact-compat-react-web.js
 ised "s/dist\/qreact\.js/dist\/qreact-react-web.js/g" _reactweb.config.js
 ised "s/src\/preact-compat\.js/src\/preact-compat-react-web.js/g" _reactweb.config.js
 ised "s/\/\/ import '.\/event\/injectResponderEventPlugin'/import '.\/event\/injectResponderEventPlugin'/" src/preact-compat-react-web.js
@@ -75,9 +77,9 @@ uglifyjs dist/qreact.js -o dist/qreact.min.js -p relative -m --source-map dist/q
 
 # try to get gzipped size
 checkgzip=$(which gzip)
-if [[ -x $checkgzip ]];then
+if [ -x $checkgzip ];then
     gzip -fk dist/qreact.min.js
-    if [[ $res -ne 0 ]];then
+    if [ $res -ne 0 ];then
         echo 'gzip faild'
         exit 250
     fi
