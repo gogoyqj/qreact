@@ -2,10 +2,6 @@ language: node_js
 sudo: required
 dist: trusty
 os: linux
-env:
-  global:
-  - secure: oyr45A3hiNLTy/rXTxZSv3rrMDNX6xuMN95+UEjfaRwpCd1iAvqIzA7ZJMIYKH5MWlXYaYV7YEdOL5YkZNYuLNENKEdvcpfGw5YhpA41klaOCFt4HAqQP2iNcjFosiHBP5BTdu9sus7rVhqy26CYlBT0u1YlkK2Msj4w1T+/u8QCV6otmMj6dQpeIGO1I2xO06htIoi8i5hbe52lTjzMoHO+rAgz2TXtH4MQaoKcsH1mfJuriLcN9C80aG+9imcK38+XOj9Nh8ol6nYSw3cJXtGiSLjrdBOaqsmFz4ojIa9xg2+aMWpmUC9rxboyooVWnk5103tjEQk6A1JysrQwvy581mufJG7zni0vTjdSpp/KUmAQkvPaMJtaHEpX0R8hjyLShRYvzPBrkX/72tN/Dgk3nL4Tja86r7czXIiy2qjMqO/OqnVLht1YEUlmz/j8OX6HXT6jErOUggaBQF4abtZqAnRyvSazn1wCMmkOeVwxrwSMklQamwpTQT1j7A8B3iAQnrZATXtXJOfQW3Mahplbgaf8SRM3NKZ56kZxuQYEEumgDFecunyXaCrEA+Nb+Mau2f2fXA72i+TTpHXo3s6sGgcGtKbKraivZuqOIsQOMEY0fHpvCJBwE0itsZfYvOb4wTT1U/8586fc6YMxf8aaozSysC+LDw12l9LobSE=
-  - secure: a/IVuxYoaESm03KOvrn9HrGDFKZxOpgWVtSS/IqPoCisM3G170vBozdDqGB4BVXkr/ypG4KoQXbi+xxNgOcXMjUbR9fziZ7mz8eBbcjB+BAWkh4C+rdrlSJDytvKDAgvqW4ZHVoLTAoV/zWhU9TeiDRA1rYjopDIlnvqSSBKAj7Or4qSiHMqGViEQ5O4TiI0akfJhs3wIsR5CRybu0ZnVs0nRcyiougf8EjaVPwES4YAKoa4Le5Bb6RsfxiRusFRb234NLwWvoIVeuP6qHqU+h+L4rnrI0nMn0yCIb2K1C0jg1DoF/x/HB6I9HNj/lxZEbVUS2aeGPyHADQRUTLuK0JNGRNAaf0V9zsxiwOlUoqWsXUPg0o9E1mAn0e1Qtkm9QO3cLkxtoEiGwZbdNlJBWTNAqKl94DEiCYM8/xanyIUli6WSyyK4XK8WKh2KEeEU3v3IrIDD0Ldfz8vsEn5blkR/KVsjmvWE0RXqfoIhuAYEHXITignGYtN0Od3sslnVYkwKP9a3smDg9UC2Jdxv2PPq6BGYWi958aLjj3qXcJwYvtFnfZVdu3Ae9xadftHzq14IWvaujnmS0V1yXid/SsH2wcPBkodT/pGIFe4G27CDYYsLONEb6+EUzbhnAcbbb2agjtDmaE4S0iCZQKkSmcG+mqWPl0/Momba6hR0AI=
 node_js:
 - v6.10.0
 cache:
@@ -14,16 +10,17 @@ cache:
 branches:
   only:
   - master
-# won't work!!
-# addons:
-#   sauce_connect: true
 before_install:
 - |
-    sudo apt-get install wget
-    wget https://saucelabs.com/downloads/sc-4.4.6-linux.tar.gz
-    tar -zxvf sc-4.4.6-linux.tar.gz
-    sudo chmod u+x sc-4.4.6-linux/bin/sc
-    ./sc-4.4.6-linux/bin/sc -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY -f sauce-connect-ready-16721 -l /home/travis/sauce-connect.log > /dev/null 2>&1 &
-    sleep 30
+  sudo apt-get install wget
+  wget https://saucelabs.com/downloads/sc-4.4.6-linux.tar.gz
+  tar -zxvf sc-4.4.6-linux.tar.gz
+  sudo chmod u+x sc-4.4.6-linux/bin/sc
+  ./sc-4.4.6-linux/bin/sc -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY -f sauce-connect-ready-16721 -l /home/travis/sauce-connect.log > /dev/null 2>&1 &
+  sleep 30
 script:
 - npm run test
+env:
+  global:
+  - secure: jS8Z+cKs1BY42sU/wVHx1ebju48KEnVysi6X/o8dJ41LVw9q+V8NU/y0qP0GFpkFU/sqnr+wDh0xLdY8PP6aOMeKJCG5jNLx9l+4vWrdk6xhQcqSmOFV/FcPI1lmPXtzBVCNzr7Ia1fEcc8zp96McFxDJHYPqYxSnvCAKzctUYIaJZIz73RD1BeFfiofmaiEqs82XFjHe8KcuJR0JlWRgGEX9iDan1zgNUegnJnhxB8NqyD+uOtKYn4cGTSa1bxKaSQuhJl48pUrPe7FzCMawmrIb+bFHDPLFscAGJ4Bkzrcd3lwjN+LSuKUZLWrulyZ9bwaJwT0VLNkpeuqMIY5hJASPDTY8O9pYfbl4FWl1q3asWbFG6/U2i62ib26yXA7tr33sxVjZC7PjNRNfHwkO9tSYIoTQhue7bCXrnjT91GjPVkXEafwYlxrv8ivv+/tcw3oxhBWei8cvMLQQsbGliF/mq+8DR1k0JdGxeE1FRIZmxS2GTYCsRKKu5w4E2Fu90jfizO5ce7zQSzdZiVkrIn8cuMI4ZR1jupowFr+E7h9o0Em/toC+P5XI6nTJVEJ/10+UwCy3M8zydmaIPnfbNcTFUF94tTAACb85sIpo8lh7fSOtwlFAhfoahVsABYdQKGHIaVqiXJ1HCYlM2JgfOPbMUhnx4lOnpLd26Ug49s=
+  - secure: D2M7ExCjvhekfkZ4p7CtYFoXBPA3v0+/91NpCKuTaRsDeGM98/6hdqBrUPlKcqE6JjgVqSOZkWy1sCH/370Ey/1bYLB2Wttt35nOMoSwVrXhkSFllsxDx8+y+MmLsZ2DczFTjW/E7CYdToyQSRuYtaEoGPF/DALJNbaMKvUVIIbpn0iphxXu4A26qH3zwdZqrca9lqZg5CUJrder71eSHkEyQYkTe0OW0NJT6hiUhsbmjudOjBf/jFqLevGWBakw9fM/vHjQsSLaRJkY94s0NNOY++pwNLro+hSGtwHP5R94OMea46Cd8bhHwMJO5mnITHMEWyNv31NrGU15CfnpFa7Rop1Tcj3SOSVMJheEtwQc28dmIFRXIjZ0YWVga16tEktF/QGdJ/tH+z+m4IalSnJRo7AqN/5tvzCurszOnPOcTLbyU5BkoKd5L7dQFSR5QcsIegOcsiMjQinaPKdUGiupvKmsoWnQpvQm+eNaz7TiXimi6YC8FZXASn5+/zqcOTEZXv2eCOaD7IizKXIEWvvQZLJ2KZMpc7R0VsQL62cBUjzW82wyk8e3MydYTPLpMuB+Mp9Hmby8DcuFrAngzDmcxyhTSvD5iQlJdpMT4eZWNuCyNI+rcciNc/lTqIzFVJnhr4TtWeD7Rp4DI5bZ2FR+IimxgLe1T6b/omA7PR4=
