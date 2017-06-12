@@ -5037,7 +5037,7 @@
                 img = img.onload = img.onerror = null;
             };
             img.onerror = function(err) {
-                failure(err);
+                failure && failure(err);
                 img = img.onload = img.onerror = null;
             };
         };
