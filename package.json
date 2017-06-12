@@ -7,8 +7,7 @@
   "scripts": {
     "test": "npm-run-all build _test",
     "_test": "node run-test.js singleRun",
-    "build": "sh build.sh",
-    "prepublish": "npm-run-all test"
+    "build": "sh build.sh"
   },
   "keywords": [
     "react",
