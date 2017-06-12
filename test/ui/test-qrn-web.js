@@ -1,12 +1,17 @@
 import qreact from 'preact-react-web';
 import { expect } from 'chai';
-import { browser, beforeHook, afterHook, loadScript }  from 'karma-event-driver-ext/cjs/event-driver-hooks';
+import { browser, beforeHook, afterHook, loadScript, config }  from 'karma-event-driver-ext/cjs/event-driver-hooks';
 let { $serial } = browser;
 let g = (id) => document.getElementById(id);
 let react = global.qreact = qreact;
+let host = '127.0.0.1';
+config({
+    host,
+    port: 8848
+});
 
 async function __loadScript() {
-    await loadScript("//127.0.0.1:8849/examples/flux/js/qunar-react-native.js");
+    await loadScript("//" + host + ":8849/examples/flux/js/qunar-react-native.js");
 }
 
 describe('QunarReactNativeWeb', function() {
@@ -42,7 +47,7 @@ describe('QunarReactNativeWeb', function() {
             CurrentScene = document.querySelectorAll(sceneQuery)[presentedIndex];
             if (presentedIndex === 0 && CurrentScene && allButtonsInIndex.length === 0) {
                 let allButtons = CurrentScene.querySelectorAll([scrollerQuery, buttonQuery, textQuery].join(' '));
-                allButtons.forEach((ele, index) => {
+                [].forEach.call(allButtons, (ele, index) => {
                     let id = '#' + (ele.parentElement.id = ele.innerText);
                     allButtonsInIndex.push(id);
                     if (index === 0) buttonHeight = ele.parentElement.offsetHeight / 2;
@@ -55,6 +60,7 @@ describe('QunarReactNativeWeb', function() {
                             indexScroll(buttonToClick);
                             // jump to:
                             await browser
+                                .pause(300)
                                 .click(buttonToClick)
                                 .$apply('wait');
                         },
@@ -101,7 +107,7 @@ describe('QunarReactNativeWeb', function() {
         };
 
         // render index
-        await loadScript("//127.0.0.1:8849/examples/flux/js/DemoApp.js");
+        await loadScript("//" + host + ":8849/examples/flux/js/DemoApp.js");
         return $serial(
             async () => {
                 // test index
@@ -128,7 +134,7 @@ describe('QunarReactNativeWeb', function() {
                 expect(inputWithMaxLength).not.equal(null);
                 let autoFocus = input._component.props.autoFocus;
                 if (!autoFocus) input.focus();
-                await browser.pause(16)
+                await browser.pause(200)
                     .keys(inputValues + '\uE004')
                     .keys('    \uE004')
                     .$apply();
@@ -136,6 +142,7 @@ describe('QunarReactNativeWeb', function() {
                 expect(inputWithMaxLength.value).to.equal('____');
                 // back index
                 await scrollToEnd()
+                    .pause(200)
                     .click(backButton)
                     .$apply('wait');
             }

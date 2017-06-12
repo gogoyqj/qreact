@@ -249,8 +249,9 @@ function innerDiffNode(dom, childrenFlated, context, mountAll, absorb, childrenP
                 if (newIndex > prevIndex) {
                     dom.insertBefore(child, originalChildrenArr[newIndex + 1]);
                 }
+                // node change, remove old
                 if (child !== prevChildNode) {
-                    recollectNodeTree(prevChild);
+                    recollectNodeTree(prevChildNode);
                 }
                 curEle = prevChildNode;
             } else {
