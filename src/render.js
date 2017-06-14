@@ -18,7 +18,7 @@ import { diff, removeChildren } from './vdom/diff';
 export function render(vnode, parent, merge) {
     let component, nodeName = vnode && vnode.nodeName, isUpdate;
     if (parent) {
-        component = parent._component;
+        component = parent.__component;
         if (!merge) merge = parent.children[0];
         // ignore SCRIPT
         if (merge && merge.nodeName === "SCRIPT") merge = null;
@@ -34,7 +34,8 @@ export function render(vnode, parent, merge) {
         } else {
             component = null; // unmount
         }
-        parent._component = component;
+        // must not use _component, since will trigger unmoutComponent
+        parent.__component = component;
     }
     let ret = diff(merge, vnode, {}, false, parent, !'componentRoot', component);
     return ret;
