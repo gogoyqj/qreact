@@ -1,14 +1,10 @@
 import qreact from 'preact-react-web';
 import { expect } from 'chai';
-import { browser, beforeHook, afterHook, loadScript, config }  from 'karma-event-driver-ext/cjs/event-driver-hooks';
+import { browser, beforeHook, afterHook, loadScript }  from 'karma-event-driver-ext/cjs/event-driver-hooks';
+import { host } from '../config';
 let { $serial } = browser;
 let g = (id) => document.getElementById(id);
 let react = global.qreact = qreact;
-let host = '127.0.0.1';
-config({
-    host,
-    port: 8848
-});
 
 async function __loadScript() {
     await loadScript("//" + host + ":8849/examples/flux/js/qunar-react-native.js");
@@ -24,6 +20,12 @@ describe('QunarReactNativeWeb', function() {
 
     after(async() => {
         await afterHook();
+        let rootTag = g('rootTag'),
+            modalTag = g('modalTag');
+        react.unmountComponentAtNode(rootTag);
+        react.unmountComponentAtNode(modalTag);
+        rootTag.parentNode.removeChild(rootTag);
+        modalTag.parentNode.removeChild(modalTag);
     });
 
     it('Test ScrollView TextInput and Others All', async () => {
@@ -108,6 +110,7 @@ describe('QunarReactNativeWeb', function() {
 
         // render index
         await loadScript("//" + host + ":8849/examples/flux/js/DemoApp.js");
+        await browser.$pause(500);
         return $serial(
             async () => {
                 // test index

@@ -79,7 +79,7 @@ uglifyjs dist/qreact.js -o dist/qreact.min.js -p relative -m --source-map dist/q
 checkgzip=$(which gzip)
 if [ -x $checkgzip ];then
     gzip -fk dist/qreact.min.js
-    if [ $res -ne 0 ];then
+    if [ $? -ne 0 ];then
         echo 'gzip faild'
         exit 250
     fi
@@ -126,3 +126,7 @@ echo 'build devtools'
 rollup -c ./rollup.devtools.config.js
 
 echo 'done'
+
+webdriverioPath=`find node_modules -name webdriverio -type d`
+cp -rf wdo-touch.js ${webdriverioPath}/build/lib/commands/touch.js
+cp -rf wdo-getLocation.js ${webdriverioPath}/build/lib/commands/getLocation.js

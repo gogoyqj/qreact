@@ -24,7 +24,14 @@ module.exports = function(config) {
             'Chrome': {
                 base: 'WebDriverio',
                 browserName: 'chrome',
-                name: 'Karma'
+                name: 'Karma',
+                config: {
+                    desiredCapabilities: {
+                        chromeOptions: {
+                            mobileEmulation: { "deviceName": "Google Nexus 5" }
+                        }
+                    }
+                }
             },
             'android-default': { // webView
                 base: 'WebDriverio',
@@ -41,7 +48,7 @@ module.exports = function(config) {
                         browserName: 'chrome',
                         platformName: 'Android'
                     },
-                    logLevel: 'none'//'verbose'
+                    logLevel: 'errors'//'verbose'
                 }
             },
             'Chrome-Android': {
@@ -57,19 +64,23 @@ module.exports = function(config) {
                         browserName: 'chrome',
                         platformName: 'Android'
                     },
-                    logLevel: 'none'//'verbose'
+                    logLevel: 'errors'//'verbose'
                 }
             },
             'Chrome-SauceLabs': {
                 base: 'WebDriverio',
                 browserName: 'chrome',
                 version: '57.0',
-                mobileEmulationEnabled: true,
                 name: 'Karma',
                 config: {
+                    desiredCapabilities: {
+                        chromeOptions: {
+                            mobileEmulation: { "deviceName": "Google Nexus 5" }
+                        }
+                    },
                     host: 'localhost',
                     port: 4445,
-                    logLevel: 'verbose',
+                    logLevel: 'errors',//'verbose',
                     name: 'integration',
                     'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
                     user: process.env.SAUCE_USERNAME,
@@ -107,11 +118,11 @@ module.exports = function(config) {
         // },
 
         files: [
-            {
-                pattern: 'test/polyfills.js',
-                watched: false,
-                webdriver: true
-            },
+            // {
+            //     pattern: 'test/polyfills.js',
+            //     watched: false,
+            //     webdriver: true
+            // },
             {
                 pattern: 'test/{browser,shared}/**.js',
                 webdriver: true,
@@ -119,6 +130,11 @@ module.exports = function(config) {
             },
             {
                 pattern: runUITests ? 'test/ui/test-qrn-web.js' : 'Ignore UI Tests',
+                webdriver: true,
+                watched: false
+            },
+            {
+                pattern: runUITests ? 'test/ui/test-yo-demo.js' : 'Ignore UI Tests',
                 webdriver: true,
                 watched: false
             }
