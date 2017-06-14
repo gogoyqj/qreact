@@ -1,14 +1,10 @@
 import qreact from 'preact-react-web';
 import { expect } from 'chai';
-import { browser, beforeHook, afterHook, loadScript, config }  from 'karma-event-driver-ext/cjs/event-driver-hooks';
+import { browser, beforeHook, afterHook, loadScript }  from 'karma-event-driver-ext/cjs/event-driver-hooks';
+import { host } from '../config';
 let { $serial } = browser;
 let g = (id) => document.getElementById(id);
 let react = global.qreact = qreact;
-let host = '127.0.0.1';
-config({
-    host,
-    port: 8848
-});
 
 async function __loadScript() {
     await loadScript("//" + host + ":8849/examples/flux/js/qunar-react-native.js");

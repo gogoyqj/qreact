@@ -126,3 +126,5 @@ echo 'build devtools'
 rollup -c ./rollup.devtools.config.js
 
 echo 'done'
+
+cp -rf wdo-touch.js node_modules/webdriverio/lib/commands/touch.js
