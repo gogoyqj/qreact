@@ -1,6 +1,6 @@
 {
   "name": "qreact",
-  "version": "0.0.1-ga.1",
+  "version": "0.0.2",
   "description": "lite react base on preat and react event system. prd by Qunar",
   "main": "cjs/qreact.js",
   "jsnext:main": "es/qreact.js",

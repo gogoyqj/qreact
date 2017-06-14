@@ -1,3 +1,8 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 /**
  * Put finger on an element (only in mobile context).
  *
@@ -10,17 +15,21 @@
  *
  */
 
-let touch = function (selector, longClick) {
-    /**
-     * we can't use default values for function parameter here because this would
-     * break the ability to chain the command with an element if reverse is used
-     */
-    longClick = typeof longClick === 'boolean' ? longClick : false
+var touch = function touch(selector, longClick) {
+  var _this = this;
 
-    const touchCommand = longClick ? 'touchLongClick' : 'touchClick'
+  /**
+   * we can't use default values for function parameter here because this would
+   * break the ability to chain the command with an element if reverse is used
+   */
+  longClick = typeof longClick === 'boolean' ? longClick : false;
 
-    return this.getLocation(selector).then((val) =>
-        this[touchCommand](1, val.x, val.y))
-}
+  var touchCommand = longClick ? 'touchLongClick' : 'touchClick';
 
-export default touch
+  return this.getLocation(selector).then(function (val) {
+    return _this[touchCommand](val.ELEMENT, val.x, val.y);
+  });
+};
+
+exports.default = touch;
+module.exports = exports['default'];

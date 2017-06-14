@@ -48,7 +48,7 @@ module.exports = function(config) {
                         browserName: 'chrome',
                         platformName: 'Android'
                     },
-                    logLevel: 'none'//'verbose'
+                    logLevel: 'errors'//'verbose'
                 }
             },
             'Chrome-Android': {
@@ -64,7 +64,7 @@ module.exports = function(config) {
                         browserName: 'chrome',
                         platformName: 'Android'
                     },
-                    logLevel: 'none'//'verbose'
+                    logLevel: 'errors'//'verbose'
                 }
             },
             'Chrome-SauceLabs': {
@@ -80,7 +80,7 @@ module.exports = function(config) {
                     },
                     host: 'localhost',
                     port: 4445,
-                    logLevel: 'verbose',
+                    logLevel: 'errors',//'verbose',
                     name: 'integration',
                     'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
                     user: process.env.SAUCE_USERNAME,
@@ -118,11 +118,11 @@ module.exports = function(config) {
         // },
 
         files: [
-            {
-                pattern: 'test/polyfills.js',
-                watched: false,
-                webdriver: true
-            },
+            // {
+            //     pattern: 'test/polyfills.js',
+            //     watched: false,
+            //     webdriver: true
+            // },
             {
                 pattern: 'test/{browser,shared}/**.js',
                 webdriver: true,

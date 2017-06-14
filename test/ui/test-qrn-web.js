@@ -20,6 +20,12 @@ describe('QunarReactNativeWeb', function() {
 
     after(async() => {
         await afterHook();
+        let rootTag = g('rootTag'),
+            modalTag = g('modalTag');
+        react.unmountComponentAtNode(rootTag);
+        react.unmountComponentAtNode(modalTag);
+        rootTag.parentNode.removeChild(rootTag);
+        modalTag.parentNode.removeChild(modalTag);
     });
 
     it('Test ScrollView TextInput and Others All', async () => {
@@ -104,6 +110,7 @@ describe('QunarReactNativeWeb', function() {
 
         // render index
         await loadScript("//" + host + ":8849/examples/flux/js/DemoApp.js");
+        await browser.$pause(500);
         return $serial(
             async () => {
                 // test index
