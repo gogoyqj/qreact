@@ -1,5 +1,7 @@
 # Qreact
 
+[![Join the chat at https://gitter.im/qreact/Lobby](https://badges.gitter.im/qreact/Lobby.svg)](https://gitter.im/qreact/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Build Status](https://travis-ci.org/gogoyqj/qreact.svg?branch=master)](https://travis-ci.org/gogoyqj/qreact)
 
 ## Description
