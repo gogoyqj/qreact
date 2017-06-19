@@ -1,7 +1,7 @@
 /** Virtual DOM Node */
 export function VNode(nodeName, attributes, children) {
     /** @type {string|function} */
-    this.nodeName = nodeName;
+    this.type = nodeName;
 
     /** @type {object<string>|undefined} */
     // m-start

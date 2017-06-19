@@ -9,10 +9,10 @@ export function isSameNodeType(node, vnode, hydrating) {
     if (typeof vnode==='string' || typeof vnode==='number') {
         return node.splitText!==undefined;
     }
-    if (typeof vnode.nodeName==='string') {
-        return !node._componentConstructor && isNamedNode(node, vnode.nodeName);
+    if (typeof vnode.type==='string') {
+        return !node._componentConstructor && isNamedNode(node, vnode.type);
     }
-    return hydrating || node._componentConstructor===vnode.nodeName;
+    return hydrating || node._componentConstructor===vnode.type;
 }
 
 
@@ -32,7 +32,7 @@ export function getNodeProps(vnode) {
     let props = extend({}, vnode.props);
     if (vnode.children != null) props.children = vnode.children;
 
-    let defaultProps = vnode.nodeName.defaultProps;
+    let defaultProps = vnode.type.defaultProps;
     if (defaultProps) {
         for (let i in defaultProps) {
             if (props[i]===undefined) {

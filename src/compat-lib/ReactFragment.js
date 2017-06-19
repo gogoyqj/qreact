@@ -12,7 +12,7 @@ exports.create = function(obj) {
                     var a = {};
                     if (c.props) for (var j in c.props) a[j] = c.props[j];
                     a.key = key+'.'+i;
-                    c = preact.createElement(c.nodeName, a, c.children);
+                    c = preact.createElement(c.type, a, c.children);
                 }
                 if (c!=null) children.push(c);
             }

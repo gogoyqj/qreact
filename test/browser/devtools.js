@@ -172,7 +172,7 @@ describe_('React Developer Tools integration', () => {
     // Functional component handling tests
     xit('wraps functional components with stateful ones', () => {
         const vnode = h(FunctionalComponent);
-        expect(vnode.nodeName.prototype).to.have.property('render');
+        expect(vnode.type.prototype).to.have.property('render');
     });
 
     it('exposes the name of functional components', () => {

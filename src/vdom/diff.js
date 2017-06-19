@@ -121,13 +121,13 @@ function idiff(dom, vnode, context, mountAll, inst) {
 
 
     // If the VNode represents a Component, perform a component diff.
-    if (typeof vnode.nodeName === 'function') {
+    if (typeof vnode.type === 'function') {
         return buildComponentFromVNode(dom, vnode, context, mountAll);
     }
 
     // flat children
     let childrenFlated = vnode && vnode.children != null && flatChildren(vnode.children);
-    if (inst && (inst.render || inst.nodeName)) {
+    if (inst && (inst.render || inst.type)) {
         inst._renderedChildren = childrenFlated;
     } else if (vnode) {
         vnode._renderedChildren = childrenFlated;
@@ -135,7 +135,7 @@ function idiff(dom, vnode, context, mountAll, inst) {
 
 
     let out = dom,
-        nodeName = String(vnode.nodeName), // @TODO this masks undefined component errors as `<undefined>`
+        nodeName = String(vnode.type), // @TODO this masks undefined component errors as `<undefined>`
         prevSvgMode = isSvgMode;
 
 

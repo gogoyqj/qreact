@@ -47,17 +47,6 @@ const EmptyComponent = () => null;
 VNode.prototype.$$typeof = REACT_ELEMENT_TYPE;
 VNode.prototype.preactCompatUpgraded = false;
 VNode.prototype.preactCompatNormalized = false;
-// Object.defineProperty(VNode.prototype, 'type', {
-//     get() { return this.nodeName; },
-//     set(v) { this.nodeName = v; },
-//     configurable: true
-// });
-
-// Object.defineProperty(VNode.prototype, 'props', {
-//     get() { return this.attributes; },
-//     set(v) { this.attributes = v; },
-//     configurable: true
-// });
 
 
 
@@ -73,7 +62,7 @@ options.vnode = vnode => {
     if (!vnode.preactCompatUpgraded) {
         vnode.preactCompatUpgraded = true;
 
-        let tag = vnode.nodeName,
+        let tag = vnode.type,
             attrs = vnode.props = extend({}, vnode.props);
 
         // children: arr length > 1 or object
@@ -94,7 +83,7 @@ options.vnode = vnode => {
 };
 
 function handleComponentVNode(vnode) {
-    let tag = vnode.nodeName,
+    let tag = vnode.type,
         a = vnode.props;
 
     vnode.props = {};
@@ -212,8 +201,8 @@ function upgradeToVNodes(arr, offset) {
         let obj = arr[i];
         if (Array.isArray(obj)) {
             upgradeToVNodes(obj);
-        } else if (obj && typeof obj === 'object' && !isValidElement(obj) && ((obj.props && obj.type) || (obj.props && obj.nodeName) || obj.children)) {
-            arr[i] = createElement(obj.type || obj.nodeName, obj.props, obj.children);
+        } else if (obj && typeof obj === 'object' && !isValidElement(obj) && ((obj.props && obj.type) || (obj.props && obj.type) || obj.children)) {
+            arr[i] = createElement(obj.type, obj.props, obj.children);
         }
     }
 }
@@ -263,8 +252,8 @@ function normalizeVNode(vnode) {
 
     applyClassName(vnode);
 
-    if (isStatelessComponent(vnode.nodeName)) {
-        vnode.nodeName = statelessComponentHook(vnode.nodeName);
+    if (isStatelessComponent(vnode.type)) {
+        vnode.type = statelessComponentHook(vnode.type);
     }
 
     let ref = vnode.props.ref,
@@ -292,7 +281,7 @@ function cloneElement(element, props = {}) {
     }
 
     let node = h(
-        element.nodeName || element.type,
+        element.type,
         newProps,
         c
     );

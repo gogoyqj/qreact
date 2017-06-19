@@ -109,7 +109,7 @@ export function renderComponent(component, opts, mountAll, isChild) {
         if (Array.isArray(rendered)) rendered = rendered[0];
         // m-end
 
-        let childComponent = rendered && rendered.nodeName,
+        let childComponent = rendered && rendered.type,
             toUnmount, base;
 
         if (typeof childComponent === 'function') {
@@ -206,11 +206,11 @@ export function buildComponentFromVNode(dom, vnode, context, mountAll) {
     let c = dom && dom._component,
         originalComponent = c,
         oldDom = dom,
-        isDirectOwner = c && dom._componentConstructor===vnode.nodeName,
+        isDirectOwner = c && dom._componentConstructor===vnode.type,
         isOwner = isDirectOwner,
         props = getNodeProps(vnode);
     while (c && !isOwner && (c=c._parentComponent)) {
-        isOwner = c.constructor===vnode.nodeName;
+        isOwner = c.constructor===vnode.type;
     }
 
     if (c && isOwner && (!mountAll || c._component)) {
@@ -222,7 +222,7 @@ export function buildComponentFromVNode(dom, vnode, context, mountAll) {
             unmountComponent(originalComponent, true);
             dom = oldDom = null;
         }
-        c = createComponent(vnode.nodeName, props, context);
+        c = createComponent(vnode.type, props, context);
         if (dom && !c.nextBase) {
             c.nextBase = dom;
             // passing dom/oldDom as nextBase will recycle it if unused, so bypass recycling on L241:

@@ -7,9 +7,9 @@ import { expect } from 'chai';
 const EMPTY_CHILDREN = undefined; //[];
 /** @jsx h */
 
-const buildVNode = (nodeName, props, children) => {
+const buildVNode = (type, props, children) => {
     let vnode = {
-        nodeName,
+        type,
         children,
         props,
         key: props && props.key
@@ -25,7 +25,7 @@ describe('h(jsx)', () => {
         expect(() => r = h('foo')).not.to.throw();
         expect(r).to.be.an('object');
         expect(r).to.be.an.instanceof(VNode);
-        expect(r).to.have.property('nodeName', 'foo');
+        expect(r).to.have.property('type', 'foo');
         expect(r).to.have.property('props', undefined);
         expect(r.children).eql(EMPTY_CHILDREN);
     });

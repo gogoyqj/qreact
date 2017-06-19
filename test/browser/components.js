@@ -5,9 +5,9 @@ let spyAll = obj => Object.keys(obj).forEach( key => sinon.spy(obj,key));
 
 function getAttributes(node) {
     let attrs = {};
-    if (node.props) {
-        for (let i=node.props.length; i--; ) {
-            attrs[node.props[i].name] = node.props[i].value;
+    if (node.attributes) {
+        for (let i=node.attributes.length; i--; ) {
+            attrs[node.attributes[i].name] = node.attributes[i].value;
         }
     }
     return attrs;
@@ -55,7 +55,7 @@ describe('Components', () => {
         expect(C1.prototype.render)
             .to.have.been.calledOnce
             .and.to.have.been.calledWithMatch({}, {})
-            .and.to.have.returned(sinon.match({ nodeName:'div' }));
+            .and.to.have.returned(sinon.match({ type:'div' }));
 
         expect(scratch.innerHTML).to.equal('<div>C1</div>');
     });
@@ -72,7 +72,7 @@ describe('Components', () => {
             .to.have.been.calledOnce
             .and.to.have.been.calledWithMatch(PROPS)
             .and.to.have.returned(sinon.match({
-                nodeName: 'div',
+                type: 'div',
                 props: PROPS
             }));
 
@@ -104,7 +104,7 @@ describe('Components', () => {
             .to.have.been.calledOnce
             .and.to.have.been.calledWithMatch(PROPS, {})
             .and.to.have.returned(sinon.match({
-                nodeName: 'div',
+                type: 'div',
                 props: PROPS
             }));
 
@@ -291,7 +291,7 @@ describe('Components', () => {
                 .to.have.been.calledOnce
                 .and.to.have.been.calledWithMatch(PROPS)
                 .and.to.have.returned(sinon.match({
-                    nodeName: Inner,
+                    type: Inner,
                     props: PROPS
                 }));
 
@@ -299,7 +299,7 @@ describe('Components', () => {
                 .to.have.been.calledOnce
                 .and.to.have.been.calledWithMatch(PROPS)
                 .and.to.have.returned(sinon.match({
-                    nodeName: 'div',
+                    type: 'div',
                     props: PROPS,
                     children: 'inner'
                 }));
