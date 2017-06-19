@@ -94,7 +94,7 @@ describe('refs', () => {
         expect(Bar).to.have.been.calledWithMatch({ b:'b', ref:sinon.match.falsy }, { });
     });
 
-    it('should add refs to components representing DOM nodes with no attributes if they have been pre-rendered', () => {
+    it('should add refs to components representing DOM nodes with no props if they have been pre-rendered', () => {
         // Simulate pre-render
         let parent = document.createElement('div');
         let child = document.createElement('div');

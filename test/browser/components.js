@@ -5,9 +5,9 @@ let spyAll = obj => Object.keys(obj).forEach( key => sinon.spy(obj,key));
 
 function getAttributes(node) {
     let attrs = {};
-    if (node.attributes) {
-        for (let i=node.attributes.length; i--; ) {
-            attrs[node.attributes[i].name] = node.attributes[i].value;
+    if (node.props) {
+        for (let i=node.props.length; i--; ) {
+            attrs[node.props[i].name] = node.props[i].value;
         }
     }
     return attrs;
@@ -73,7 +73,7 @@ describe('Components', () => {
             .and.to.have.been.calledWithMatch(PROPS)
             .and.to.have.returned(sinon.match({
                 nodeName: 'div',
-                attributes: PROPS
+                props: PROPS
             }));
 
         expect(scratch.innerHTML).to.equal('<div foo="bar"></div>');
@@ -105,7 +105,7 @@ describe('Components', () => {
             .and.to.have.been.calledWithMatch(PROPS, {})
             .and.to.have.returned(sinon.match({
                 nodeName: 'div',
-                attributes: PROPS
+                props: PROPS
             }));
 
         expect(scratch.innerHTML).to.equal('<div foo="bar"></div>');
@@ -292,7 +292,7 @@ describe('Components', () => {
                 .and.to.have.been.calledWithMatch(PROPS)
                 .and.to.have.returned(sinon.match({
                     nodeName: Inner,
-                    attributes: PROPS
+                    props: PROPS
                 }));
 
             expect(Inner)
@@ -300,7 +300,7 @@ describe('Components', () => {
                 .and.to.have.been.calledWithMatch(PROPS)
                 .and.to.have.returned(sinon.match({
                     nodeName: 'div',
-                    attributes: PROPS,
+                    props: PROPS,
                     children: 'inner'
                 }));
 
@@ -341,7 +341,7 @@ describe('Components', () => {
             expect(Inner.secondCall)
                 .to.have.been.calledWithMatch({ foo:'bar', i:2 })
                 .and.to.have.returned(sinon.match({
-                    attributes: {
+                    props: {
                         j: 2,
                         i: 2,
                         foo: 'bar'
@@ -363,7 +363,7 @@ describe('Components', () => {
             expect(Inner.thirdCall)
                 .to.have.been.calledWithMatch({ foo:'bar', i:3 })
                 .and.to.have.returned(sinon.match({
-                    attributes: {
+                    props: {
                         j: 3,
                         i: 3,
                         foo: 'bar'
@@ -438,7 +438,7 @@ describe('Components', () => {
             expect(Inner.prototype.render.secondCall)
                 .to.have.been.calledWithMatch({ foo:'bar', i:2 })
                 .and.to.have.returned(sinon.match({
-                    attributes: {
+                    props: {
                         j: 2,
                         i: 2,
                         foo: 'bar'
@@ -466,7 +466,7 @@ describe('Components', () => {
             expect(Inner.prototype.render.thirdCall)
                 .to.have.been.calledWithMatch({ foo:'bar', i:3 })
                 .and.to.have.returned(sinon.match({
-                    attributes: {
+                    props: {
                         j: 3,
                         i: 3,
                         foo: 'bar'

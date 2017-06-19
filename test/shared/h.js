@@ -7,12 +7,12 @@ import { expect } from 'chai';
 const EMPTY_CHILDREN = undefined; //[];
 /** @jsx h */
 
-const buildVNode = (nodeName, attributes, children) => {
+const buildVNode = (nodeName, props, children) => {
     let vnode = {
         nodeName,
         children,
-        attributes,
-        key: attributes && attributes.key
+        props,
+        key: props && props.key
     };
     if (children === undefined) delete vnode.children;
     options.vnode(vnode);
@@ -26,15 +26,15 @@ describe('h(jsx)', () => {
         expect(r).to.be.an('object');
         expect(r).to.be.an.instanceof(VNode);
         expect(r).to.have.property('nodeName', 'foo');
-        expect(r).to.have.property('attributes', undefined);
+        expect(r).to.have.property('props', undefined);
         expect(r.children).eql(EMPTY_CHILDREN);
     });
 
-    it('should perserve raw attributes', () => {
+    it('should perserve raw props', () => {
         let attrs = { foo: 'bar', baz: 10, func: () => {} },
             r = h('foo', attrs);
         expect(r).to.be.an('object')
-            .with.property('attributes')
+            .with.property('props')
             .that.deep.equals(attrs);
     });
 

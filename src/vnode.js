@@ -4,7 +4,9 @@ export function VNode(nodeName, attributes, children) {
     this.nodeName = nodeName;
 
     /** @type {object<string>|undefined} */
-    this.attributes = attributes;
+    // m-start
+    this.props = attributes;
+    // m-end
 
     /** @type {array<VNode>|undefined} */
     

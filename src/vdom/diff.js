@@ -186,7 +186,7 @@ function idiff(dom, vnode, context, mountAll, inst) {
             _component = _component._renderedChildren;
         }
     }
-    let attributes = vnode.attributes;
+    let attributes = vnode.props;
     // if set html, jump diff
     if (!(attributes && attributes.dangerouslySetInnerHTML != null)) innerDiffNode(out, childrenFlated, context, mountAll, false, out === dom && (_component || prevChildren));
 
@@ -398,7 +398,7 @@ function _flatChildren(children, prefix, childrenFlated, existKeys, index) {
             break;
     }
     if (singleNode) {
-        let key = children.attributes && children.attributes.key;
+        let key = children.props && children.props.key;
         if (key != null) {
             // auto fix duplicate key prom
             if (existKeys && (key in existKeys)) {

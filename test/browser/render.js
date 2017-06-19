@@ -5,8 +5,8 @@ import { h, render, Component } from '../../src/preact';
 
 function getAttributes(node) {
     let attrs = {};
-    for (let i = node.attributes.length; i--;) {
-        attrs[node.attributes[i].name] = node.attributes[i].value;
+    for (let i = node.props.length; i--;) {
+        attrs[node.props[i].name] = node.props[i].value;
     }
     return attrs;
 }
@@ -92,7 +92,7 @@ describe('render()', () => {
         expect(scratch.firstChild).to.have.property('innerHTML', ',,,0,NaN');
     });
 
-    it('should clear falsey attributes', () => {
+    it('should clear falsey props', () => {
         let root = render((
             <div anull="anull" aundefined="aundefined" afalse="afalse" anan="aNaN" a0="a0" />
         ), scratch);
@@ -158,37 +158,37 @@ describe('render()', () => {
         expect(scratch).to.have.property('innerHTML', '<div><input><table></table></div>', 'for undefined');
     });
 
-    it('should apply string attributes', () => {
+    it('should apply string props', () => {
         render(<div foo="bar" data-foo="databar" />, scratch);
 
         let div = scratch.childNodes[0];
-        expect(div).to.have.deep.property('attributes.length', 2);
+        expect(div).to.have.deep.property('props.length', 2);
 
-        expect(div).to.have.deep.property('attributes[0].name', 'foo');
-        expect(div).to.have.deep.property('attributes[0].value', 'bar');
+        expect(div).to.have.deep.property('props[0].name', 'foo');
+        expect(div).to.have.deep.property('props[0].value', 'bar');
 
-        expect(div).to.have.deep.property('attributes[1].name', 'data-foo');
-        expect(div).to.have.deep.property('attributes[1].value', 'databar');
+        expect(div).to.have.deep.property('props[1].name', 'data-foo');
+        expect(div).to.have.deep.property('props[1].value', 'databar');
     });
 
-    it('should not serialize function props as attributes', () => {
+    it('should not serialize function props as props', () => {
         render(<div click={function a() { }} ONCLICK={function b() { }} />, scratch);
 
         let div = scratch.childNodes[0];
-        expect(div).to.have.deep.property('attributes.length', 0);
+        expect(div).to.have.deep.property('props.length', 0);
     });
 
-    it('should serialize object props as attributes', () => {
+    it('should serialize object props as props', () => {
         render(<div foo={{ a: 'b' }} bar={{ toString() { return 'abc'; } }} />, scratch);
 
         let div = scratch.childNodes[0];
-        expect(div).to.have.deep.property('attributes.length', 2);
+        expect(div).to.have.deep.property('props.length', 2);
 
-        expect(div).to.have.deep.property('attributes[0].name', 'foo');
-        expect(div).to.have.deep.property('attributes[0].value', '[object Object]');
+        expect(div).to.have.deep.property('props[0].name', 'foo');
+        expect(div).to.have.deep.property('props[0].value', '[object Object]');
 
-        expect(div).to.have.deep.property('attributes[1].name', 'bar');
-        expect(div).to.have.deep.property('attributes[1].value', 'abc');
+        expect(div).to.have.deep.property('props[1].name', 'bar');
+        expect(div).to.have.deep.property('props[1].value', 'abc');
     });
 
     it('should apply class as String', () => {
@@ -218,7 +218,7 @@ describe('render()', () => {
 
     //     render(<div click={ click } onClick={ onclick } />, scratch);
 
-    //     expect(scratch.childNodes[0]).to.have.deep.property('attributes.length', 0);
+    //     expect(scratch.childNodes[0]).to.have.deep.property('props.length', 0);
 
     //     expect(proto.addEventListener).to.have.been.calledOnce
     //         .and.to.have.been.calledWithExactly('click', sinon.match.func, false);
@@ -406,7 +406,7 @@ describe('render()', () => {
         expect(scratch.innerHTML).to.equal(`<div>${html}</div>`);
     });
 
-    it('should reconcile mutated DOM attributes', () => {
+    it('should reconcile mutated DOM props', () => {
         let check = p => render(<input type="checkbox" checked={p} />, scratch, scratch.lastChild),
             value = () => scratch.lastChild.checked,
             setValue = p => scratch.lastChild.checked = p;

@@ -7,6 +7,7 @@ import { Component as PreactComponent } from './component';
 import { render as preactRender } from './render';
 import options from './options';
 import { extend } from './util';
+import { VNode } from './vnode';
 
 
 const version = '15.1.0'; // trick libraries to think we are react
@@ -43,21 +44,20 @@ const EmptyComponent = () => null;
 
 
 
-let VNode = h('').constructor;
 VNode.prototype.$$typeof = REACT_ELEMENT_TYPE;
 VNode.prototype.preactCompatUpgraded = false;
 VNode.prototype.preactCompatNormalized = false;
-Object.defineProperty(VNode.prototype, 'type', {
-    get() { return this.nodeName; },
-    set(v) { this.nodeName = v; },
-    configurable: true
-});
+// Object.defineProperty(VNode.prototype, 'type', {
+//     get() { return this.nodeName; },
+//     set(v) { this.nodeName = v; },
+//     configurable: true
+// });
 
-Object.defineProperty(VNode.prototype, 'props', {
-    get() { return this.attributes; },
-    set(v) { this.attributes = v; },
-    configurable: true
-});
+// Object.defineProperty(VNode.prototype, 'props', {
+//     get() { return this.attributes; },
+//     set(v) { this.attributes = v; },
+//     configurable: true
+// });
 
 
 
@@ -74,7 +74,7 @@ options.vnode = vnode => {
         vnode.preactCompatUpgraded = true;
 
         let tag = vnode.nodeName,
-            attrs = vnode.attributes = extend({}, vnode.attributes);
+            attrs = vnode.props = extend({}, vnode.props);
 
         // children: arr length > 1 or object
         if (vnode.children) attrs.children = vnode.children;
@@ -95,11 +95,11 @@ options.vnode = vnode => {
 
 function handleComponentVNode(vnode) {
     let tag = vnode.nodeName,
-        a = vnode.attributes;
+        a = vnode.props;
 
-    vnode.attributes = {};
-    if (tag.defaultProps) extend(vnode.attributes, tag.defaultProps);
-    if (a) extend(vnode.attributes, a);
+    vnode.props = {};
+    if (tag.defaultProps) extend(vnode.props, tag.defaultProps);
+    if (a) extend(vnode.props, a);
 }
 
 function handleElementVNode(vnode, a) {
@@ -108,7 +108,7 @@ function handleElementVNode(vnode, a) {
         for (i in a)
             if ((shouldSanitize = CAMEL_PROPS.test(i))) break;
         if (shouldSanitize) {
-            attrs = vnode.attributes = {};
+            attrs = vnode.props = {};
             for (i in a) {
                 if (a.hasOwnProperty(i)) {
                     attrs[CAMEL_PROPS.test(i) ? i.replace(/([A-Z0-9])/, '-$1').toLowerCase() : i] = a[i];
@@ -212,8 +212,8 @@ function upgradeToVNodes(arr, offset) {
         let obj = arr[i];
         if (Array.isArray(obj)) {
             upgradeToVNodes(obj);
-        } else if (obj && typeof obj === 'object' && !isValidElement(obj) && ((obj.props && obj.type) || (obj.attributes && obj.nodeName) || obj.children)) {
-            arr[i] = createElement(obj.type || obj.nodeName, obj.props || obj.attributes, obj.children);
+        } else if (obj && typeof obj === 'object' && !isValidElement(obj) && ((obj.props && obj.type) || (obj.props && obj.nodeName) || obj.children)) {
+            arr[i] = createElement(obj.type || obj.nodeName, obj.props, obj.children);
         }
     }
 }
@@ -239,12 +239,14 @@ function statelessComponentHook(Ctor) {
 
     Wrapped = wrapStatelessComponent(Ctor);
 
-    Object.defineProperty(Wrapped, COMPONENT_WRAPPER_KEY, { configurable: true, value: true });
+    // Object.defineProperty(Wrapped, COMPONENT_WRAPPER_KEY, { configurable: true, value: true });
+    Wrapped[COMPONENT_WRAPPER_KEY] = true;
     Wrapped.displayName = Ctor.displayName || Ctor.name;
     Wrapped.propTypes = Ctor.propTypes;
     Wrapped.defaultProps = Ctor.defaultProps;
 
-    Object.defineProperty(Ctor, COMPONENT_WRAPPER_KEY, { configurable: true, value: Wrapped });
+    // Object.defineProperty(Ctor, COMPONENT_WRAPPER_KEY, { configurable: true, value: Wrapped });
+    Ctor[COMPONENT_WRAPPER_KEY] = Wrapped;
 
     return Wrapped;
 }
@@ -265,10 +267,10 @@ function normalizeVNode(vnode) {
         vnode.nodeName = statelessComponentHook(vnode.nodeName);
     }
 
-    let ref = vnode.attributes.ref,
+    let ref = vnode.props.ref,
         type = ref && typeof ref;
     if (currentComponent && (type === 'string' || type === 'number')) {
-        vnode.attributes.ref = createStringRefProxy(ref, currentComponent);
+        vnode.props.ref = createStringRefProxy(ref, currentComponent);
     }
 
     // since using origin react event, applyEventNormalization become useless
@@ -280,7 +282,7 @@ function normalizeVNode(vnode) {
 // 不使用外面的cloneElement,使用这里的
 function cloneElement(element, props = {}) {
     if (!isValidElement(element)) return element;
-    let elementProps = element.attributes || element.props || {};
+    let elementProps = element.props || {};
     let newProps = extend(extend({}, elementProps), props);
     let c;
     if (arguments.length > 2) {
@@ -489,7 +491,7 @@ function newComponentHook(props, context) {
 
 
 function propsHook(props) {
-    if (!props) return;
+    // if (!props) return;
 
     // React annoyingly special-cases single children, and some react components are ridiculously strict about this.
     // let c = props.children;

@@ -24,12 +24,12 @@ export function isNamedNode(node, nodeName) {
 /**
  * Reconstruct Component-style `props` from a VNode.
  * Ensures default/fallback values from `defaultProps`:
- * Own-properties of `defaultProps` not present in `vnode.attributes` are added.
+ * Own-properties of `defaultProps` not present in `vnode.props` are added.
  * @param {VNode} vnode
  * @returns {Object} props
  */
 export function getNodeProps(vnode) {
-    let props = extend({}, vnode.attributes);
+    let props = extend({}, vnode.props);
     if (vnode.children != null) props.children = vnode.children;
 
     let defaultProps = vnode.nodeName.defaultProps;
