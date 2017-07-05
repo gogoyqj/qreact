@@ -9,14 +9,13 @@ import options from './options';
 import { extend } from './util';
 import { VNode } from './vnode';
 
-
 const version = '15.1.0'; // trick libraries to think we are react
 
 const ELEMENTS = 'a abbr address area article aside audio b base bdi bdo big blockquote body br button canvas caption cite code col colgroup data datalist dd del details dfn dialog div dl dt em embed fieldset figcaption figure footer form h1 h2 h3 h4 h5 h6 head header hgroup hr html i iframe img input ins kbd keygen label legend li link main map mark menu menuitem meta meter nav noscript object ol optgroup option output p param picture pre progress q rp rt ruby s samp script section select small source span strong style sub summary sup table tbody td textarea tfoot th thead time title tr track u ul var video wbr circle clipPath defs ellipse g image line linearGradient mask path pattern polygon polyline radialGradient rect stop svg text tspan'.split(' ');
 
-const REACT_ELEMENT_TYPE = (typeof Symbol === 'function' && Symbol.for && Symbol.for('react.element')) || 0xeac7;
+const REACT_ELEMENT_TYPE = 0xeac7;
 
-const COMPONENT_WRAPPER_KEY = typeof Symbol !== 'undefined' ? Symbol.for('__preactCompatWrapper') : '__preactCompatWrapper';
+const COMPONENT_WRAPPER_KEY = '__preactCompatWrapper';
 
 // don't autobind these methods since they already have guaranteed context.
 const AUTOBIND_BLACKLIST = {
@@ -44,9 +43,11 @@ const EmptyComponent = () => null;
 
 
 
-VNode.prototype.$$typeof = REACT_ELEMENT_TYPE;
-VNode.prototype.preactCompatUpgraded = false;
-VNode.prototype.preactCompatNormalized = false;
+VNode.prototype = {
+    $$typeof: REACT_ELEMENT_TYPE,
+    preactCompatUpgraded: false,
+    preactCompatNormalized: false
+};
 
 
 
@@ -57,8 +58,13 @@ options.event = e => {
     return e;
 };
 
-let oldVnodeHook = options.vnode;
+// let oldVnodeHook = options.vnode;
 options.vnode = vnode => {
+    // fork add to support react event sys
+    vnode._hostParent = null;
+    vnode._hostNode = null;
+    vnode._rootNodeID = null;
+
     if (!vnode.preactCompatUpgraded) {
         vnode.preactCompatUpgraded = true;
 
@@ -79,7 +85,7 @@ options.vnode = vnode => {
             handleElementVNode(vnode, attrs);
         }
     }
-    if (oldVnodeHook) oldVnodeHook(vnode);
+    // if (oldVnodeHook) oldVnodeHook(vnode);
 };
 
 function handleComponentVNode(vnode) {
@@ -582,16 +588,17 @@ let qreact = {
     unstable_renderSubtreeIntoContainer: renderSubtreeIntoContainer
 };
 
+// rm-for-mini-start
+import './event-patch';
 import ReactDefaultInjection from './event/ReactDefaultInjection';
 import ReactAdapter from './lib/ReactAdapter';
-
 ReactAdapter.adapt(qreact);
 // extract injectResponderEventPlugin to qreact/lib/injectResponderEventPlugin.js
 // 请不要修改下方代码，否则就炒了你
 // never modify code below, or u will be fired
 // import './event/injectResponderEventPlugin';import ReactWebAdapter from './lib/ReactWebAdapter';ReactWebAdapter.adapt(qreact)
 ReactDefaultInjection.inject();
-
+// rm-for-mini-end
 export default qreact;
 
 // comment-start

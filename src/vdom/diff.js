@@ -1,7 +1,4 @@
 import { ATTR_KEY } from '../constants';
-// qreact begin
-import { loseUp } from '../util';
-// qreact end
 import { isSameNodeType, isNamedNode } from './index';
 import { buildComponentFromVNode } from './component';
 import { setAccessor, createNode, removeNode, createComment, isComment } from '../dom/index';
@@ -34,11 +31,11 @@ export function flushMounts() {
                 previousState = component[2],
                 previousContext = component[3];
             component = component[0];
-            if (component.componentDidUpdate) component.componentDidUpdate(previousProps, previousState, previousContext);
-            if (options.afterUpdate) options.afterUpdate(component);
+            component.componentDidUpdate && component.componentDidUpdate(previousProps, previousState, previousContext);
+            // if (options.afterUpdate) options.afterUpdate(component);
         } else {
-            if (options.afterMount) options.afterMount(component);
-            if (component.componentDidMount) component.componentDidMount();
+            // if (options.afterMount) options.afterMount(component);
+            component.componentDidMount && component.componentDidMount();
         }
     }
 }
@@ -73,7 +70,7 @@ export function diff(dom, vnode, context, mountAll, parent, componentRoot, compo
     // append the element if its a new parent
     if (parent && ret && ret.parentNode !== parent) {
         parent.insertBefore(ret, nextSibling);
-        loseUp(vnode, ret);
+        options.loseUp(vnode, ret);
     }
 
     // diffLevel being reduced to 0 means we're exiting the diff
@@ -149,7 +146,7 @@ function idiff(dom, vnode, context, mountAll, inst) {
         // - create an element with the nodeName from VNode
         out = createNode(nodeName, isSvgMode);
         // m-start
-        vnode && loseUp(vnode, out);
+        vnode && options.loseUp(vnode, out);
         // m-end
     } else if (!isNamedNode(dom, nodeName)) {
         // case: Element and VNode had different nodeNames
@@ -158,7 +155,7 @@ function idiff(dom, vnode, context, mountAll, inst) {
 
         out = createNode(nodeName, isSvgMode);
         // m-start
-        vnode && loseUp(vnode, out);
+        vnode && options.loseUp(vnode, out);
         // m-end
 
         // instead moving children from dom to out, just remove them

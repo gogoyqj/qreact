@@ -1,8 +1,18 @@
 import { IS_NON_DIMENSIONAL } from '../constants';
 import options from '../options';
 
+// Passive Support
+// let supportsPassive = false;
+// try {
+//     let opts = Object.defineProperty({}, 'passive', {
+//         get: () => {
+//             supportsPassive = true;
+//         }
+//     });
+//     window.addEventListener("test", null, opts);
+// } catch (e) {}
+
 // m-start
-import { recycle } from '../util';
 import { removeChildren } from '../vdom/diff';
 
 // use comment node replace null
@@ -35,7 +45,7 @@ export function createNode(nodeName, isSvg) {
 export function removeNode(node) {
     // m-start
     let p = node.parentNode;
-    recycle(node);
+    options.recycle(node);
     if (p) p.removeChild(node);
     // m-end
 }
@@ -93,13 +103,13 @@ export function setAccessor(node, name, old, value, isSvg, inst) {
             return options.handleEvent(node, name, value, inst);
         }
         // m-end
-        let useCapture = name !== (name=name.replace(/Capture$/, ''));
+        let capture = name !== (name=name.replace(/Capture$/, ''));
         name = name.toLowerCase().substring(2);
         if (value) {
-            if (!old) node.addEventListener(name, eventProxy, useCapture);
+            if (!old) node.addEventListener(name, eventProxy, capture);
         }
         else {
-            node.removeEventListener(name, eventProxy, useCapture);
+            node.removeEventListener(name, eventProxy, capture);
         }
         (node._listeners || (node._listeners = {}))[name] = value;
     }

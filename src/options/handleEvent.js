@@ -1,7 +1,7 @@
 import ReactEventBridge from '../event/ReactEventBridge';
 
 let event = function () {
-    ReactEventBridge.birdge.apply(null, arguments);
+    ReactEventBridge.bridge.apply(null, arguments);
 };
 
 export default event;
