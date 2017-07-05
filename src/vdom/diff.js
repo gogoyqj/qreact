@@ -311,7 +311,7 @@ export function recollectNodeTree(node, unmountOnly = false) {
         }
 
         if (attributes) {
-            removeChildren(node, unmountOnly);
+            removeChildren(node);
         }
         // m-end
     }

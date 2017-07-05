@@ -16,7 +16,7 @@ import { diff, removeChildren } from './vdom/diff';
  *    render(<Thing name="one" />, document.querySelector('#foo'));
  */
 export function render(vnode, parent, merge) {
-    let component, nodeName = vnode && vnode.type, isUpdate;
+    let component, nodeName = vnode && vnode.type;
     if (parent) {
         component = parent.__component;
         if (!merge) merge = parent.children[0];
@@ -25,7 +25,7 @@ export function render(vnode, parent, merge) {
 
         // first render clear container
         // or nodeName change, unmout the old, mount the new, or update
-        if (!component || !(isUpdate = component.type == nodeName)) {
+        if (!component || component.type != nodeName) {
             removeChildren(parent, merge);
         }
         if (vnode) {
