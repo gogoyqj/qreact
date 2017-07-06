@@ -7,3 +7,4 @@ __tmp__*
 /coverage/*
 
 src/preact-compat-react-web.js
+src/preact-compat-mini.js

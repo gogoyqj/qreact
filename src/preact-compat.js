@@ -317,33 +317,32 @@ function createStringRefProxy(name, component) {
     });
 }
 
-
-// function applyEventNormalization({ nodeName, attributes }) {
-//     if (!attributes || typeof nodeName !== 'string') return;
-//     let props = {};
-//     for (let i in attributes) {
-//         props[i.toLowerCase()] = i;
+// function applyEventNormalization({ nodeName, props }) {
+//     if (!props || typeof nodeName !== 'string') return;
+//     let _props = {};
+//     for (let i in props) {
+//         _props[i.toLowerCase()] = i;
 //     }
-//     if (props.ondoubleclick) {
-//         attributes.ondblclick = attributes[props.ondoubleclick];
-//         delete attributes[props.ondoubleclick];
+//     if (_props.ondoubleclick) {
+//         _props.ondblclick = _props[_props.ondoubleclick];
+//         delete _props[_props.ondoubleclick];
 //     }
-//     if (props.onchange) {
+//     if (_props.onchange) {
 //         nodeName = nodeName.toLowerCase();
-//         let attr = nodeName === 'input' && String(attributes.type).toLowerCase() === 'checkbox' ? 'onclick' : 'oninput',
-//             normalized = props[attr] || attr;
-//         if (!attributes[normalized]) {
-//             attributes[normalized] = multihook([attributes[props[attr]], attributes[props.onchange]]);
-//             delete attributes[props.onchange];
+//         let attr = nodeName === 'input' && String(_props.type).toLowerCase() === 'checkbox' ? 'onclick' : 'oninput',
+//             normalized = _props[attr] || attr;
+//         if (!_props[normalized]) {
+//             _props[normalized] = multihook([_props[_props[attr]], _props[_props.onchange]]);
+//             delete _props[_props.onchange];
 //         }
 //     }
 // }
 
 
-function applyClassName({ attributes }) {
-    if (!attributes) return;
-    let cl = attributes.className || attributes.class;
-    if (cl) attributes.className = cl;
+function applyClassName({ props }) {
+    if (!props) return;
+    let cl = props.className || props.class;
+    if (cl) props.className = cl;
 }
 
 function shallowDiffers(a, b) {
@@ -589,18 +588,19 @@ let qreact = {
 };
 
 // rm-for-mini-start
+// integrate original react event system for qreact/qreact-web, excludes for qreact-mini
 import './event-patch';
 import ReactDefaultInjection from './event/ReactDefaultInjection';
 import ReactAdapter from './lib/ReactAdapter';
 ReactAdapter.adapt(qreact);
-// extract injectResponderEventPlugin to qreact/lib/injectResponderEventPlugin.js
-// 请不要修改下方代码，否则就炒了你
-// never modify code below, or u will be fired
+// qreact-web uses this to realise panResponder
 // import './event/injectResponderEventPlugin';import ReactWebAdapter from './lib/ReactWebAdapter';ReactWebAdapter.adapt(qreact)
 ReactDefaultInjection.inject();
 // rm-for-mini-end
+
 export default qreact;
 
+// es only
 // comment-start
 export {
     version,
